@@ -1,0 +1,215 @@
+@import 'tailwindcss';
+
+/*
+ * Leo Club of Raththanapitiya — "Archive"
+ *
+ * A club that reads its own past as its subject. The organising device is a
+ * timeline spine: a single vertical rule running the length of every page with
+ * entries pinned to it by year. Everything is dated; nothing floats free.
+ *
+ * Photography is monochrome throughout, with crimson as the only colour on the
+ * site. That is what makes a 2004 print and a 2025 phone photograph sit on the
+ * same page without one looking like a mistake.
+ *
+ * Token names are ROLES, not hues.
+ */
+
+@theme {
+  /* --- Surfaces ------------------------------------------------------- */
+  --color-page: #f4f1eb;
+  --color-panel: #eae6dd;
+  --color-inverse: #14110f;
+  --color-on-inverse: #f0ece4;
+
+  /* --- Text ----------------------------------------------------------- */
+  --color-ink: #14110f;
+  --color-ink-muted: #4e4842;
+  --color-ink-faint: #857d73;
+
+  /* --- Accent ---------------------------------------------------------- */
+  /* Crimson is the ONLY colour on this site. It marks the spine, the current
+     year, and links. Nothing else is coloured. */
+  --color-accent: #8c1c2b;
+  --color-accent-strong: #6b1220;
+
+  /* --- Lines ----------------------------------------------------------- */
+  --color-rule: #ded8cd;
+  --color-rule-strong: #bdb5a7;
+
+  /* --- Type ------------------------------------------------------------ */
+  --font-heading: var(--font-eb-garamond), ui-serif, Georgia, serif;
+  --font-body: var(--font-libre-franklin), ui-sans-serif, system-ui, sans-serif;
+
+  --text-archive: 4rem;
+  --text-archive--line-height: 1.04;
+  --text-archive--letter-spacing: -0.015em;
+
+  --ease-archive: cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+@layer base {
+  html {
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    background-color: var(--color-page);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-heading);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-accent) 22%, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .wrap {
+    width: 100%;
+    max-width: 74rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .wrap {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  .measure {
+    max-width: 36rem;
+  }
+
+  .band {
+    padding-block: 4.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .band {
+      padding-block: 6.5rem;
+    }
+  }
+
+  /*
+   * The spine. A single hairline running the full height of a list, with each
+   * entry pinned to it. The rule sits at a fixed left offset so year labels and
+   * markers always align down the page regardless of entry height.
+   */
+  .spine {
+    position: relative;
+    padding-left: 2.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .spine {
+      padding-left: 9rem;
+    }
+  }
+
+  .spine::before {
+    content: '';
+    position: absolute;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    left: 0.375rem;
+    width: 1px;
+    background-color: var(--color-rule-strong);
+  }
+
+  @media (min-width: 768px) {
+    .spine::before {
+      left: 7.125rem;
+    }
+  }
+
+  /* The marker pinned to the spine for each entry. */
+  .pin {
+    position: absolute;
+    left: 0;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 9999px;
+    border: 1px solid var(--color-accent);
+    background-color: var(--color-page);
+  }
+
+  @media (min-width: 768px) {
+    .pin {
+      left: 6.75rem;
+    }
+  }
+
+  .pin-filled {
+    background-color: var(--color-accent);
+  }
+
+  /* The year label sitting left of the spine. Hidden on small screens, where
+     the year runs inline above the entry instead. */
+  .spine-year {
+    position: absolute;
+    left: 0;
+    display: none;
+    width: 6rem;
+    text-align: right;
+    font-family: var(--font-heading);
+    font-size: 1.125rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-ink-faint);
+  }
+
+  @media (min-width: 768px) {
+    .spine-year {
+      display: block;
+    }
+  }
+
+  /*
+   * Monochrome photography. The single treatment that lets prints from 2004 and
+   * phone photographs from 2025 sit on one page without either looking wrong.
+   */
+  .mono img {
+    filter: grayscale(1) contrast(1.06);
+  }
+
+  .reveal {
+    transition:
+      opacity 550ms var(--ease-archive),
+      transform 550ms var(--ease-archive);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal.is-hidden {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+}
